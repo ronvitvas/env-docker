@@ -3060,9 +3060,9 @@ docker pull memcached:1.6.40-alpine
   - добавляем слоем сверху конфигурацию бд
   - собираем `bitrix24/percona-server:8.0.44-v1-rhel` / `bitrix24/percona-server:8.4.7-v1-rhel`
 - веб-сервер:
-  - используем стабильный образ `nginx:1.28.0-alpine-slim`
+  - используем стабильный образ `nginx:1.28.1-alpine-slim`
   - добавляем модули слоем сверху
-  - собираем `bitrix24/nginx:1.28.0-v3-alpine`
+  - собираем `bitrix24/nginx:1.28.1-v1-alpine`
 - интерпретатор PHP-кода:
   - готового совместимого образа PHP нет
   - берем по умолчанию образ `php:8.2.30-fpm-alpine3.22` / `php:8.3.30-fpm-alpine3.22` / `php:8.4.17-fpm-alpine3.22` и добавляем то, что нам надо через пару слоев сверху
@@ -3095,7 +3095,7 @@ docker pull memcached:1.6.40-alpine
 ```bash
 docker pull percona/percona-server:8.0.44
 docker pull percona/percona-server:8.4.7
-docker pull nginx:1.28.0-alpine-slim
+docker pull nginx:1.28.1-alpine-slim
 docker pull php:8.2.30-fpm-alpine3.22
 docker pull php:8.3.30-fpm-alpine3.22
 docker pull php:8.4.17-fpm-alpine3.22
@@ -3140,8 +3140,8 @@ docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Doc
 
 - `bitrix24/nginx`:
 ```bash
-cd env-docker/sources/bxnginx1280/
-docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Dockerfile -t bitrix24/nginx:1.28.0-v3-alpine --no-cache .
+cd env-docker/sources/bxnginx1281/
+docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Dockerfile -t bitrix24/nginx:1.28.1-v1-alpine --no-cache .
 ```
 
 - `bitrix24/percona-server` для версии `8.0.x`:
@@ -3191,37 +3191,37 @@ docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Doc
 - `xslt`
 - `zip`
 
-Модули собираются на базе стабильного образа `nginx:1.28.0-alpine-slim`, используя официальный образ Nginx с [DockerHub](https://hub.docker.com/):
+Модули собираются на базе стабильного образа `nginx:1.28.1-alpine-slim`, используя официальный образ Nginx с [DockerHub](https://hub.docker.com/):
 - `Nginx`: https://hub.docker.com/_/nginx
 
 Образ Nginx можно предварительно скачать, используя команду:
 ```bash
-docker pull nginx:1.28.0-alpine-slim
+docker pull nginx:1.28.1-alpine-slim
 ```
 
-Для сборки потребуется `Dockerfile` от версии `1.28.0`, найти который можно на [GitHub](https://github.com/nginx/docker-nginx).
+Для сборки потребуется `Dockerfile` от версии `1.28.1`, найти который можно на [GitHub](https://github.com/nginx/docker-nginx).
 
-Скачиваем файл для версии 1.28.0 по ссылке: [https://github.com/nginx/docker-nginx/blob/7f1d49f6f222f7e588a9066fd53a0ce43c3466a5/stable/alpine/Dockerfile](https://github.com/nginx/docker-nginx/blob/7f1d49f6f222f7e588a9066fd53a0ce43c3466a5/stable/alpine/Dockerfile)
+Скачиваем файл для версии 1.28.1 по ссылке: [https://github.com/nginx/docker-nginx/blob/3a5661a6374fd9e0752cf82bbd61fdcf5df59e54/stable/alpine/Dockerfile](https://github.com/nginx/docker-nginx/blob/3a5661a6374fd9e0752cf82bbd61fdcf5df59e54/stable/alpine/Dockerfile)
 
-Модифицируем файл, добавляем нужные модули по списку выше и служебную часть. Пример всех изменений файла для версии 1.28.0 можно найти в папке `/sources/bxnginx1280modules/v3/`.
+Модифицируем файл, добавляем нужные модули по списку выше и служебную часть. Пример всех изменений файла для версии 1.28.1 можно найти в папке `/sources/bxnginx1281modules/v1/`.
 
 Запускаем сборку образа `nginx_modules`, указываем две архитектуры `amd64` и `arm64` в команде:
 
 ```bash
-cd env-docker/sources/bxnginx1280modules/v3/
-docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Dockerfile -t nginx_modules:1.28.0-v3-alpine --no-cache .
+cd env-docker/sources/bxnginx1281modules/v1/
+docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Dockerfile -t bitrix24/nginx_modules:1.28.1-v1-alpine --no-cache .
 ```
 
 После нужно запустить два контейнера, используя собранный образ выше. По одному для каждой архитектуры: `amd64` и `arm64`.
 
 Для `amd64` выполняем команду:
 ```bash
-docker run --platform=linux/amd64 -d --name=nginxmodules1280testingamd64 -it nginx_modules:1.28.0-v3-alpine
+docker run --platform=linux/amd64 -d --name=nginxmodules1281testingamd64 -it bitrix24/nginx_modules:1.28.1-v1-alpine
 ```
 
 Для `arm64` выполняем команду:
 ```bash
-docker run --platform=linux/arm64 -d --name=nginxmodules1280testingarm64 -it nginx_modules:1.28.0-v3-alpine
+docker run --platform=linux/arm64 -d --name=nginxmodules1281testingarm64 -it bitrix24/nginx_modules:1.28.1-v1-alpine
 ```
 
 Собранные модули Nginx будут доступны в каталоге `/root/packages/` у каждого запущенного контейнера.
@@ -3250,12 +3250,12 @@ exit
 
 Для `amd64` выполняем команду:
 ```bash
-docker container stop nginxmodules1280testingamd64 && docker container rm nginxmodules1280testingamd64
+docker container stop nginxmodules1281testingamd64 && docker container rm nginxmodules1281testingamd64
 ```
 
 Для `arm64` выполняем команду:
 ```bash
-docker container stop nginxmodules1280testingarm64 && docker container rm nginxmodules1280testingarm64
+docker container stop nginxmodules1281testingarm64 && docker container rm nginxmodules1281testingarm64
 ```
 
 Содержимое обоих архивов (`nginxmodules_amd64.zip` и `nginxmodules_arm64.zip`) размещаем в репозитории `bitrix-tools/nginx-modules` на [GitHub](https://github.com/bitrix-tools/nginx-modules).
@@ -3269,7 +3269,7 @@ docker container stop nginxmodules1280testingarm64 && docker container rm nginxm
 
 Собранные модули для Nginx будут использоваться при сборке образа `bitrix24/nginx`.
 
-Механизм сборки для версии `1.28.0` можно найти в файле `/sources/bxnginx1280/Dockerfile`.
+Механизм сборки для версии `1.28.1` можно найти в файле `/sources/bxnginx1281/Dockerfile`.
 
 <a id="fstkos"></a>
 # Особенности операционных систем сертифицированных ФСТЭК
