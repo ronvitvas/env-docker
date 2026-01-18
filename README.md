@@ -2903,7 +2903,7 @@ docker compose exec --user=root valkey sh -c "valkey-cli -h 127.0.0.1 -p 6379"
 По умолчанию в проекте используются следующие программы и их версии:
 ```bash
 Memcached 1.6.x
-Redis 7.2.x
+Redis 8.2.x
 PostgreSQL 16.x
 Percona Server 8.0.x
 PHP 8.2.x
@@ -2920,17 +2920,17 @@ Lego 4.31.x
 <a id="redisalternativeversions"></a>
 ### Redis
 
-Доступные альтернативные версии Redis: `7.4.x`, `8.0.x`, `8.2.x`, `8.4.x`.
+Доступные альтернативные версии Redis: `7.2.x`, `7.4.x`, `8.0.x`, `8.4.x`.
 
-Разберем пример использования версии `7.4.x` вместо текущей версии `7.2.x`.
+Разберем пример использования версии `8.4.x` вместо текущей версии `8.2.x`.
 
-До первого запуска проекта редактируем файл `docker-compose.yml`, в разделе `services` находим сервис `redis`. В строку с текущей версией `7.2.x` добавляем `#`, в строке с версией `7.4.x` убираем `#`. Итоговый вид:
+До первого запуска проекта редактируем файл `docker-compose.yml`, в разделе `services` находим сервис `redis`. В строку с текущей версией `8.2.x` добавляем `#`, в строке с версией `8.4.x` убираем `#`. Итоговый вид:
 ```bash
 #image: redis:7.2.12-alpine
-image: redis:7.4.7-alpine
+#image: redis:7.4.7-alpine
 #image: redis:8.0.5-alpine
 #image: redis:8.2.3-alpine
-#image: redis:8.4.0-alpine
+image: redis:8.4.0-alpine
 ```
 
 Запускаем все контейнеры, оставляем их работать в фоне:
@@ -2938,9 +2938,9 @@ image: redis:7.4.7-alpine
 docker compose up -d
 ```
 
-Таким образом Redis будет использовать контейнер с версией `7.4.7`.
+Таким образом Redis будет использовать контейнер с версией `8.4.0`.
 
-Для версий `8.0.x`, `8.2.x`, `8.4.x` настройку выполняем аналогичным образом.
+Для версий `7.2.x`, `7.4.x`, `8.0.x` настройку выполняем аналогичным образом.
 
 <a id="postgresqlalternativeversions"></a>
 ### PostgreSQL
@@ -3038,13 +3038,13 @@ docker compose up -d
 
 В этот список попадают (формат `название`:`полный_тег_с_указанием_версии_и_ос`):
 - `postgres:16.11-bookworm`
-- `redis:7.2.12-alpine`
+- `redis:8.2.3-alpine`
 - `memcached:1.6.40-alpine`
 
 Можно предварительно скачать ПО из списка выше с помощью команд:
 ```bash
 docker pull postgres:16.11-bookworm
-docker pull redis:7.2.12-alpine
+docker pull redis:8.2.3-alpine
 docker pull memcached:1.6.40-alpine
 ```
 

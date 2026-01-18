@@ -43,10 +43,10 @@ services:
         aliases:
           - memcached
   redis:
-    image: redis:7.2.12-alpine
+    #image: redis:7.2.12-alpine
     #image: redis:7.4.7-alpine
     #image: redis:8.0.5-alpine
-    #image: redis:8.2.3-alpine
+    image: redis:8.2.3-alpine
     #image: redis:8.4.0-alpine
     container_name: dev_redis
     restart: unless-stopped
