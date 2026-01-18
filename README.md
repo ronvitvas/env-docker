@@ -3073,8 +3073,8 @@ docker pull memcached:1.6.40-alpine
 - Push-сервер:
   - готового образа нет
   - используем образ NodeJS 22-ой версии
-  - используем исходники `push-server-0.4.0`
-  - собираем `bitrix24/push:3.1-v1-alpine`
+  - используем исходники `push-server-0.5.0`
+  - собираем `bitrix24/push:3.2-v1-alpine`
 - сервис для бесплатных SSL-сертификатов от `LetsEncrypt`:
   - используем стабильный образ `goacme/lego:v4.31.0`
   - добавляем логику слоем сверху
@@ -3116,8 +3116,8 @@ docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Doc
 
 - `bitrix24/push`:
 ```bash
-cd env-docker/sources/bxpush31/
-docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Dockerfile -t bitrix24/push:3.1-v1-alpine --no-cache .
+cd env-docker/sources/bxpush32/
+docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Dockerfile -t bitrix24/push:3.2-v1-alpine --no-cache .
 ```
 
 - `bitrix24/php` для версии `8.2.x`:

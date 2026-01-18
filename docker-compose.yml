@@ -213,7 +213,7 @@ services:
         aliases:
           - nginx
   push-sub:
-    image: quay.io/bitrix24/push:3.1-v1-alpine
+    image: quay.io/bitrix24/push:3.2-v1-alpine
     container_name: dev_push_sub
     restart: unless-stopped
     env_file:
@@ -240,7 +240,7 @@ services:
     depends_on:
       - redis
   push-pub:
-    image: quay.io/bitrix24/push:3.1-v1-alpine
+    image: quay.io/bitrix24/push:3.2-v1-alpine
     container_name: dev_push_pub
     restart: unless-stopped
     env_file:
