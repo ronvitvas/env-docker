@@ -897,6 +897,16 @@ function custom_mail($to, $subject, $message, $additional_headers='', $additiona
 
 В контейнере с `php` по умолчанию доступен [PHP Composer](https://getcomposer.org/).
 
+Предварительно в административной части продукта на странице `Управление структурой` (`/bitrix/admin/fileman_admin.php?lang=ru&path=%2F`) отредактируем файл `/bitrix/.settings.php`, добавляем блок настроек:
+
+```php
+        'composer' => [
+                'value' => [
+                        'config_path' => '/opt/www/bitrix/composer-bx.json'
+                ]
+        ],
+```
+
 Чтобы его использовать, заходим в sh-консоль контейнера `php` из-под пользователя `bitrix`:
 ```bash
 docker compose exec --user=bitrix php sh
