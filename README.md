@@ -3011,7 +3011,7 @@ docker compose up -d
 php:
 #image: quay.io/bitrix24/php:8.2.30-fpm-v1-alpine
 image: quay.io/bitrix24/php:8.3.30-fpm-v1-alpine
-#image: quay.io/bitrix24/php:8.4.17-fpm-v1-alpine
+#image: quay.io/bitrix24/php:8.4.18-fpm-v1-alpine
 ```
 
 В секции `volumes` в строку с текущей версией `.../82/...` добавляем `#`, в строке с версией `.../83/...` убираем `#`:
@@ -3075,8 +3075,8 @@ docker pull memcached:1.6.40-alpine
   - собираем `bitrix24/nginx:1.28.2-v1-alpine`
 - интерпретатор PHP-кода:
   - готового совместимого образа PHP нет
-  - берем по умолчанию образ `php:8.2.30-fpm-alpine3.22` / `php:8.3.30-fpm-alpine3.22` / `php:8.4.17-fpm-alpine3.22` и добавляем то, что нам надо через пару слоев сверху
-  - собираем `bitrix24/php:8.2.30-fpm-v1-alpine` / `bitrix24/php:8.3.30-fpm-v1-alpine` / `bitrix24/php:8.4.17-fpm-v1-alpine`
+  - берем по умолчанию образ `php:8.2.30-fpm-alpine3.22` / `php:8.3.30-fpm-alpine3.22` / `php:8.4.18-fpm-alpine3.22` и добавляем то, что нам надо через пару слоев сверху
+  - собираем `bitrix24/php:8.2.30-fpm-v1-alpine` / `bitrix24/php:8.3.30-fpm-v1-alpine` / `bitrix24/php:8.4.18-fpm-v1-alpine`
 - поиск:
   - готового образа Sphinx нет, но есть собранный пакет `sphinx` на базе `Alpine Linux` в официальном репозитории ОС
   - собираем `bitrix24/sphinx:2.2.11-v2-alpine`, установив пакет
@@ -3108,7 +3108,7 @@ docker pull percona/percona-server:8.4.7
 docker pull nginx:1.28.2-alpine-slim
 docker pull php:8.2.30-fpm-alpine3.22
 docker pull php:8.3.30-fpm-alpine3.22
-docker pull php:8.4.17-fpm-alpine3.22
+docker pull php:8.4.18-fpm-alpine3.22
 docker pull node:22
 docker pull node:22-alpine
 docker pull alpine:3.21
@@ -3144,8 +3144,8 @@ docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Doc
 
 - `bitrix24/php` для версии `8.4.x`:
 ```bash
-cd env-docker/sources/bxphp8417/
-docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Dockerfile -t bitrix24/php:8.4.17-fpm-v1-alpine --no-cache .
+cd env-docker/sources/bxphp8418/
+docker buildx build --platform linux/arm64,linux/amd64 --provenance=false -f Dockerfile -t bitrix24/php:8.4.18-fpm-v1-alpine --no-cache .
 ```
 
 - `bitrix24/nginx`:
