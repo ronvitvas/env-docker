@@ -2962,11 +2962,11 @@ docker compose up -d
 
 До первого запуска проекта редактируем файл `docker-compose.yml`, в разделе `services` находим сервис `postgres`. В строку с текущей версией `16.x` добавляем `#`, в строке с версией `17.x` убираем `#`. Итоговый вид:
 ```bash
-#image: postgres:14.20-bookworm
-#image: postgres:15.15-bookworm
-#image: postgres:16.11-bookworm
-image: postgres:17.7-bookworm
-#image: postgres:18.1-bookworm
+#image: postgres:14.21-trixie
+#image: postgres:15.16-trixie
+#image: postgres:16.12-trixie
+image: postgres:17.8-trixie
+#image: postgres:18.2-trixie
 ```
 
 Запускаем все контейнеры, оставляем их работать в фоне:
@@ -2974,9 +2974,15 @@ image: postgres:17.7-bookworm
 docker compose up -d
 ```
 
-Таким образом PostgreSQL будет использовать контейнер с версией `17.7`.
+Таким образом PostgreSQL будет использовать контейнер с версией `17.8`.
 
 Для версий `14.x`, `15.x`, `18.x` настройку выполняем аналогичные образом.
+
+> [!CAUTION]
+> Внимание! В образах PostgreSQL с версии `18.x` изменился путь, используемый для тома с данными этой базы.
+>
+> При использовании версии `18.x` до первого запуска проекта редактируем файл `docker-compose.yml`, в разделе `services` находим сервис `postgres`.
+> В списке томов `volumes` находим строку `- postgres_data:/var/lib/postgresql/data` добавляем `#`, в строке ниже `- postgres_data:/var/lib/postgresql` убираем `#`.
 
 <a id="mysqlalternativeversions"></a>
 ### MySQL
@@ -3048,13 +3054,13 @@ docker compose up -d
 - `Memcached`: https://hub.docker.com/_/memcached
 
 В этот список попадают (формат `название`:`полный_тег_с_указанием_версии_и_ос`):
-- `postgres:16.11-bookworm`
+- `postgres:16.12-trixie`
 - `redis:8.2.4-alpine`
 - `memcached:1.6.40-alpine`
 
 Можно предварительно скачать ПО из списка выше с помощью команд:
 ```bash
-docker pull postgres:16.11-bookworm
+docker pull postgres:16.12-trixie
 docker pull redis:8.2.4-alpine
 docker pull memcached:1.6.40-alpine
 ```
