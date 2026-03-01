@@ -2847,7 +2847,7 @@ docker compose -f docker-compose.yml -f docker-compose-my.yml ps
 
 Для примера, запустим [Valkey](https://hub.docker.com/r/valkey/valkey/), добавив его в проект в существующий `yml` файл.
 
-На странице valkey на DockerHub-е находим нужный нам тег, пример `7.2.11-alpine`.
+На странице valkey на DockerHub-е находим нужный нам тег, пример `7.2.12-alpine`.
 
 Редактируем `docker-compose.yml` файл:
 
@@ -2860,7 +2860,7 @@ docker compose -f docker-compose.yml -f docker-compose-my.yml ps
 - в раздел `services` добавляем описание сервиса:
 ```bash
   valkey:
-    image: valkey/valkey:7.2.11-alpine
+    image: valkey/valkey:7.2.12-alpine
     container_name: dev_valkey
     restart: unless-stopped
     command: valkey-server
