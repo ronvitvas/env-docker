@@ -3056,13 +3056,13 @@ docker compose up -d
 В этот список попадают (формат `название`:`полный_тег_с_указанием_версии_и_ос`):
 - `postgres:16.13-trixie`
 - `redis:8.2.5-alpine`
-- `memcached:1.6.40-alpine`
+- `memcached:1.6.41-alpine`
 
 Можно предварительно скачать ПО из списка выше с помощью команд:
 ```bash
 docker pull postgres:16.13-trixie
 docker pull redis:8.2.5-alpine
-docker pull memcached:1.6.40-alpine
+docker pull memcached:1.6.41-alpine
 ```
 
 <a id="bitriximages"></a>
