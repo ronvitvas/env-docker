@@ -117,7 +117,7 @@ services:
           - postgres
   mysql:
     image: quay.io/bitrix24/percona-server:8.0.45-v1-rhel
-    #image: quay.io/bitrix24/percona-server:8.4.7-v1-rhel
+    #image: quay.io/bitrix24/percona-server:8.4.8-v1-rhel
     container_name: dev_mysql
     restart: unless-stopped
     env_file:
