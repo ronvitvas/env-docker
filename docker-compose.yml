@@ -346,7 +346,7 @@ services:
     depends_on:
       - php
   ssl:
-    image: quay.io/bitrix24/ssl:1.1-v1-alpine
+    image: quay.io/bitrix24/ssl:1.2-v1-alpine
     container_name: dev_ssl
     restart: unless-stopped
     env_file:
