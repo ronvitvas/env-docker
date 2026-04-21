@@ -14,6 +14,7 @@
 * [Docker и Docker Compose](#docker)
 * [docker-compose.yml](#dockercomposeyml)
 * [Пароли к базам данных MySQL и PostgreSQL](#databasespasswords)
+* [Пароль для Redis](#redispassword)
 * [Секретный ключ для Push-сервера](#pushserversecretkey)
 * [Часовой пояс (timezone)](#timezone)
 * [Управление](#management)
@@ -176,6 +177,53 @@ POSTGRES_PASSWORD="CHANGE_POSTGRESQL_POSTGRES_PASSWORD_HERE"
 ```
 
 Обязательно измените значения в файле `.env_sql`, заменив шаблоны `CHANGE_MYSQL_ROOT_PASSWORD_HERE` и `CHANGE_POSTGRESQL_POSTGRES_PASSWORD_HERE` на ваши значения.
+
+<a id="redispassword"></a>
+# Пароль для Redis
+
+По умолчанию контейнер `redis` работает в режиме "без пароля".
+
+Однако, для усиления безопасности нужно использовать контейнер `redis`в режиме "обязательно с паролем".
+
+> [!CAUTION]
+> Внимание! Перед первым запуском обязательно придумайте или сгенерируйте ваш уникальный пароль для `Redis`, если необходимо использовать пароль для этого сервиса.
+
+Для этого используем образ `Alpine Linux`:
+```bash
+docker pull alpine:3.22
+```
+
+Генерируем уникальный пароль для `Redis` с помощью команды:
+```bash
+docker container run --rm --name redis_password_generate alpine:3.22 sh -c "(cat /dev/urandom | tr -dc A-Za-z0-9\.\,\?\!\@\$\-\+\=\(\)\{\}\[\] | head -c 16) | tr -d '\' | tr -d '^' && echo ''"
+```
+
+Шаблон пароля для сервиса `Redis` (`CHANGE_REDIS_PASSWORD_HERE`) хранится:
+
+- в файле `confs/redis/redis.conf` в виде:
+```bash
+#requirepass CHANGE_REDIS_PASSWORD_HERE
+```
+
+- в файле `.env_redis` в виде:
+```bash
+#REDIS_PASSWORD="CHANGE_REDIS_PASSWORD_HERE"
+```
+
+Обязательно измените значения в файлах `confs/redis/redis.conf` и `.env_redis`, заменив шаблон `CHANGE_REDIS_PASSWORD_HERE` на ваше значение в обоих файлах.
+
+Например, для установки пароля `AbCdEfGh@159!753` контейнера `redis`:
+
+- в файле `confs/redis/redis.conf` убираем `#` в строке с `requirepass`, меняем пароль в шаблоне `CHANGE_REDIS_PASSWORD_HERE`, итог:
+```bash
+requirepass AbCdEfGh@159!753
+```
+
+- в файле `.env_redis` к первой строке `REDIS_PASSWORD=""` добавляем `#`, во второй строке убираем `#` и меняем пароль в шаблоне `CHANGE_REDIS_PASSWORD_HERE`, итог:
+```bash
+#REDIS_PASSWORD=""
+REDIS_PASSWORD="AbCdEfGh@159!753"
+```
 
 <a id="pushserversecretkey"></a>
 # Секретный ключ для Push-сервера
@@ -637,6 +685,11 @@ Cохранить.
 Параметры переменных сред контейнеров хранятся в файлах `.env_push_pub` и `.env_push_sub`.
 
 Cекретный ключ для подписи соединения между клиентом и push-сервером хранится в файле `.env_push` и был создан вами в главе [Секретный ключ для Push-сервера](#pushserversecretkey).
+
+Push-сервер используется в связке с контейнером `redis`. По умолчанию сервис `redis` работает в режиме "без пароля". Возможно и обратное, когда сервис `redis` работает в режиме "обязательно с паролем". Настройка пароля для `Redis` описана выше в главе [Пароль для Redis](#redispassword).
+
+> [!CAUTION]
+> Внимание! Поддержка работы сервиса `push` в связке с сервисом `redis`, использующим пароль, доступна с версии `3.3` и выше (образ `bitrix24/push:3.3-v1-alpine`).
 
 Возвращаемся к главам [Адресация](#iporurls) и [Порты](#ports) этого документа. Определяемся по какой схеме работает сайт. Например:
 - используется локальный IP вида `10.0.1.119`
@@ -1347,6 +1400,10 @@ docker compose restart nginx
 
 Также может быть использован для хранения кеша и для хранения данных сессий.
 
+По умолчанию сервис `redis` работает в режиме "без пароля". Возможно и обратное, когда сервис `redis` работает в режиме "обязательно с паролем".
+
+Настройка пароля для `Redis` описана выше в главе [Пароль для Redis](#redispassword).
+
 <a id="cachestorage"></a>
 ## Кеширование
 
@@ -1356,6 +1413,7 @@ docker compose restart nginx
 
 - `memcache`:
 ```php
+        // cache on memcache
         'cache' => [
                 'value' => [
                         'type' => [
@@ -1371,8 +1429,9 @@ docker compose restart nginx
         ],
 ```
 
-- `redis`:
+- `redis` без пароля:
 ```php
+        // cache on redis
         'cache' => [
                 'value' => [
                         'type' => [
@@ -1388,6 +1447,27 @@ docker compose restart nginx
         ],
 ```
 
+- `redis` с паролем:
+```php
+        // cache on redis with password
+        'cache' => [
+                'value' => [
+                        'type' => [
+                                'class_name' => '\\Bitrix\\Main\\Data\\CacheEngineRedis',
+                                'extension' => 'redis'
+                        ],
+                        'redis' => [
+                                'host' => 'redis',
+                                'port' => '6379',
+                                'password' => 'CHANGE_REDIS_PASSWORD_HERE',
+                        ]
+                ],
+                'sid' => $_SERVER["DOCUMENT_ROOT"]."#01234"
+        ],
+```
+
+Меняем шаблон `CHANGE_REDIS_PASSWORD_HERE` на пароль сервиса `redis`, который был создан вами в главе [Пароль для Redis](#redispassword). Его значение хранится в файле `.env_redis`.
+
 Документация: https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=43&CHAPTER_ID=02795&LESSON_PATH=3913.3516.5062.2795#cache
 
 <a id="sessionstorage"></a>
@@ -1399,7 +1479,7 @@ docker compose restart nginx
 
 - `memcache`, разделенная сессия:
 ```php
-        // memcache separated
+        // sessions on memcache (separated)
         'session' => [
                 'value' => [
                         'lifetime' => 14400,
@@ -1416,9 +1496,9 @@ docker compose restart nginx
         ],
 ```
 
-- `redis`:
+- `redis` без пароля:
 ```php
-        // redis
+        // sessions on redis
         'session' => [
                 'value' => [
                         'mode' => 'default',
@@ -1433,9 +1513,29 @@ docker compose restart nginx
         ],
 ```
 
+- `redis` с паролем:
+```php
+        // sessions on redis with password
+        'session' => [
+                'value' => [
+                        'mode' => 'default',
+                        'handlers' => [
+                                'general' => [
+                                        'type' => 'redis',
+                                        'port' => '6379',
+                                        'host' => 'redis',
+                                        'password' => 'CHANGE_REDIS_PASSWORD_HERE',
+                                ],
+                        ],
+                ],
+        ],
+```
+
+Меняем шаблон `CHANGE_REDIS_PASSWORD_HERE` на пароль сервиса `redis`, который был создан вами в главе [Пароль для Redis](#redispassword). Его значение хранится в файле `.env_redis`.
+
 - `database`:
 ```php
-        // database
+        // sessions on database
         'session' => [
                 'value' => [
                         'mode' => 'default',
