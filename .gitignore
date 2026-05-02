@@ -1,0 +1,56 @@
+# deny by default
+*
+
+# keep the repository policy itself versioned
+!.gitignore
+
+# allow directories needed to traverse
+!www/
+!www/local/
+!www/local/modules/
+!www/local/components/
+!www/local/components/uds/
+!www/local/js/
+!www/local/js/uds/
+!www/local/php_interface/
+!www/local/php_interface/include/
+!www/ideabank/
+!www/docs/
+!www/.clinerules/
+
+# ideabank2 module source
+!www/local/modules/uds.ideabank2/
+!www/local/modules/uds.ideabank2/**
+!www/local/components/uds/ideabank.*/
+!www/local/components/uds/ideabank.*/**
+!www/local/js/uds/ideabank2/
+!www/local/js/uds/ideabank2/**
+!www/local/php_interface/include/ideabank2_public_helpers.php
+!www/ideabank/**
+!www/docs/ideabank2-*.md
+!www/docs/ideabank2-module-guide.md
+
+# optional project instructions
+!www/.clinerules/**
+!www/AGENTS.md
+
+# always ignore runtime/secrets/generated
+.env*
+*.log
+*.tmp
+*.bak
+*.sql
+*.dump
+*.zip
+*.tar
+*.tar.gz
+.DS_Store
+
+www/bitrix/
+www/upload/
+www/local/_/tmp/
+www/local/_/node_modules/
+www/local/_/vendor/
+qdrant/
+sources/
+bitrix24-cline-starter-v3-no-mcp/
